@@ -1,0 +1,9 @@
+{
+  "name": "redux-example-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/react-redux-e2e/src",
+  "implicitDependencies": ["redux-example"],
+  "// targets": "to see all targets run: nx show project redux-example-e2e --web",
+  "targets": {}
+}
