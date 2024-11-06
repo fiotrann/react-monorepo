@@ -6,17 +6,22 @@ import {
   MapCameraProps,
   MapMouseEvent,
 } from '@vis.gl/react-google-maps';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const INITIAL_POSITION = {
   center: { lat: -37.840935, lng: 144.946457 },
   zoom: 12,
 };
 
+interface ILocation {
+  lat: number;
+  lng: number;
+}
 export default function Locations() {
-  const [markers, setMarkers] = useState([
-    { lat: -37.840935, lng: 144.946457 },
-  ]);
+  const [markers, setMarkers] = useState<ILocation[]>(() => {
+    const saved = localStorage.getItem('destinations');
+    return saved ? JSON.parse(saved) : [{ lat: -37.840935, lng: 144.946457 }];
+  });
 
   const [locationProps, setLocationProps] =
     useState<MapCameraProps>(INITIAL_POSITION);
@@ -26,10 +31,14 @@ export default function Locations() {
     [locationProps]
   );
 
+  useEffect(() => {
+    localStorage.setItem('destinations', JSON.stringify(markers));
+  });
+
   const onMapClick = (e: MapMouseEvent) => {
     const value = e.detail.latLng;
     if (value) {
-      setMarkers((current) => [
+      setMarkers((current: ILocation[]) => [
         ...current,
         {
           lat: value.lat,
